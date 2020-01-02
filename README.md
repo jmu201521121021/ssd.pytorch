@@ -1,8 +1,12 @@
+# Add pytorch to onnx model file 
+
 # SSD: Single Shot MultiBox Object Detector, in PyTorch
+
 A [PyTorch](http://pytorch.org/) implementation of [Single Shot MultiBox Detector](http://arxiv.org/abs/1512.02325) from the 2016 paper by Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang, and Alexander C. Berg.  The official and original Caffe code can be found [here](https://github.com/weiliu89/caffe/tree/ssd).
 
-
 <img align="right" src= "https://github.com/amdegroot/ssd.pytorch/blob/master/doc/ssd.png" height = 400/>
+
+
 
 ### Table of Contents
 - <a href='#installation'>Installation</a>
@@ -103,8 +107,8 @@ You can specify the parameters listed in the `eval.py` file by flagging them or 
 ##### mAP
 
 | Original | Converted weiliu89 weights | From scratch w/o data aug | From scratch w/ data aug |
-|:-:|:-:|:-:|:-:|
-| 77.2 % | 77.26 % | 58.12% | 77.43 % |
+| :------: | :------------------------: | :-----------------------: | :----------------------: |
+|  77.2 %  |          77.26 %           |          58.12%           |         77.43 %          |
 
 ##### FPS
 **GTX 1060:** ~45.45 FPS
@@ -121,14 +125,14 @@ You can specify the parameters listed in the `eval.py` file by flagging them or 
     * SSD300 trained on VOC0712 (original Caffe weights)
       - https://s3.amazonaws.com/amdegroot-models/ssd_300_VOC0712.pth
 - Our goal is to reproduce this table from the [original paper](http://arxiv.org/abs/1512.02325)
-<p align="left">
-<img src="http://www.cs.unc.edu/~wliu/papers/ssd_results.png" alt="SSD results on multiple datasets" width="800px"></p>
+  <p align="left">
+  <img src="http://www.cs.unc.edu/~wliu/papers/ssd_results.png" alt="SSD results on multiple datasets" width="800px"></p>
 
 ### Try the demo notebook
 - Make sure you have [jupyter notebook](http://jupyter.readthedocs.io/en/latest/install.html) installed.
 - Two alternatives for installing jupyter notebook:
     1. If you installed PyTorch with [conda](https://www.continuum.io/downloads) (recommended), then you should already have it.  (Just  navigate to the ssd.pytorch cloned repo and run):
-    `jupyter notebook`
+      `jupyter notebook`
 
     2. If using [pip](https://pypi.python.org/pypi/pip):
 
