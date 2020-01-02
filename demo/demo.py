@@ -57,13 +57,13 @@ if __name__ == '__main__':
     from data import VOC_CLASSES as labels
 
     net = build_ssd('test', 300, 21)  # initialize SSD
-    net.load_weights('../weights/ssd300_mAP_77.43_v2.pth')
+    net.load_weights('../weights/ssd300_mAP_74.9.pth')
     #
     # net = build_ssd_onnx('test', 300, 21)
     # converToOnxx(net)
 
     top_k = 10
-    img = cv2.imread('../data/example.jpg')
+    img = cv2.imread('../data/car.jpg')
     x = cv2.resize(img, (300, 300)).astype(np.float32)
     x -= (104.0, 117.0, 123.0)
     x = x.astype(np.float32)

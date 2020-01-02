@@ -12,28 +12,33 @@ if __name__ == '__main__':
     priorbox = PriorBox(cfg)
     with torch.no_grad():
         priors = priorbox.forward()
-        print(priors[-20:])
+        print('prior:', priors[0, :])
         detect = Detect(num_classes, 0, 200, 0.01, 0.45)
-    model = onnx.load('ssd_vgg300_sim.onnx')
+    model = onnx.load('ssd_vgg300.onnx')
     onnx.checker.check_model(model)
 
-    ort_session = onnxruntime.InferenceSession("ssd_vgg300_sim.onnx")
+    ort_session = onnxruntime.InferenceSession("ssd_vgg300.onnx")
 
-    img = cv2.imread('../data/example.jpg')
+    img = cv2.imread('../data/car.jpg')
     x = cv2.resize(img, (300, 300)).astype(np.float32)
     print(x.shape)
+    print(x[0,0,:])
     x -= np.array([104.0, 117.0, 123.0])
     x = x.astype(np.float32)
     print(x.shape)
     x = np.transpose(x, (2, 0, 1))
+
 
     x = x.reshape((1, x.shape[0], x.shape[1], x.shape[2]))
     print(x.shape)
     ort_inputs = {ort_session.get_inputs()[0].name: x}
     ort_outs = ort_session.run(None, ort_inputs)
 
-    reg = torch.from_numpy(ort_outs[0])
-    cls = torch.from_numpy(ort_outs[1])
+    reg = torch.from_numpy(ort_outs[0][0])
+    cls = torch.from_numpy(ort_outs[1][0])
+
+    print(reg[0])
+    print(cls[0][0])
     detections = detect(reg, cls, priors)
 
 
@@ -45,6 +50,7 @@ if __name__ == '__main__':
             score = detections[0, i, j, 0]
             label_name = labels[i - 1]
             display_txt = '%s: %.2f' % (label_name, score)
+            print(i-1);
             pt = (detections[0, i, j, 1:] * scale).cpu().numpy()
             #coords = (pt[0], pt[1]), pt[2] - pt[0] + 1, pt[3] - pt[1] + 1)
 

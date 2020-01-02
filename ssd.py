@@ -37,7 +37,8 @@ class SSD(nn.Module):
         # SSD network
         self.vgg = nn.ModuleList(base)
         # Layer learns to scale the l2 normalized features from conv4_3
-        self.L2Norm = L2Norm(512, 20)
+        # self.L2Norm = L2Norm(512, 20)
+        # self.L2Norm = L2Norm()
         self.extras = nn.ModuleList(extras)
 
         self.loc = nn.ModuleList(head[0])
@@ -74,8 +75,8 @@ class SSD(nn.Module):
         for k in range(23):
             x = self.vgg[k](x)
 
-        s = self.L2Norm(x)
-        sources.append(s)
+        # s = self.L2Norm(x)
+        sources.append(x)
 
         # apply vgg up to fc7
         for k in range(23, len(self.vgg)):
@@ -115,7 +116,7 @@ class SSD(nn.Module):
         if ext == '.pkl' or '.pth':
             print('Loading weights into state dict...')
             self.load_state_dict(torch.load(base_file,
-                                 map_location=lambda storage, loc: storage))
+                                 map_location=lambda storage, loc: storage,),strict=False)
             print('Finished!')
         else:
             print('Sorry only .pth and .pkl files supported.')
@@ -252,7 +253,7 @@ class SSD_ONNX(nn.Module):
         # SSD network
         self.vgg = nn.ModuleList(base)
         # Layer learns to scale the l2 normalized features from conv4_3
-        self.L2Norm = L2Norm(512, 20)
+        # self.L2Norm = L2Norm()
         self.extras = nn.ModuleList(extras)
 
         self.loc = nn.ModuleList(head[0])
@@ -289,8 +290,8 @@ class SSD_ONNX(nn.Module):
         for k in range(23):
             x = self.vgg[k](x)
 
-        s = self.L2Norm(x)
-        sources.append(s)
+        # s = self.L2Norm(x)
+        sources.append(x)
 
         # apply vgg up to fc7
         for k in range(23, len(self.vgg)):
@@ -311,7 +312,7 @@ class SSD_ONNX(nn.Module):
         loc = torch.cat([o.view(o.size(0), -1) for o in loc], 1)
         conf = torch.cat([o.view(o.size(0), -1) for o in conf], 1)
 
-        return  loc.view(loc.size(0), -1, 4),self.softmax(conf.view(conf.size(0), -1,
+        return  loc.view(loc.size(0),1, -1, 4),self.softmax(conf.view(conf.size(0),1, -1,
                              self.num_classes))
 
 
@@ -320,7 +321,7 @@ class SSD_ONNX(nn.Module):
         if ext == '.pkl' or '.pth':
             print('Loading weights into state dict...')
             self.load_state_dict(torch.load(base_file,
-                                 map_location=lambda storage, loc: storage))
+                                 map_location=lambda storage, loc: storage), strict=False)
             print('Finished!')
         else:
             print('Sorry only .pth and .pkl files supported.')

@@ -25,9 +25,8 @@ def converToOnxx(torch_model):
     torch.onnx.export(torch_model,  # model being run
                       x,  # model input (or a tuple for multiple inputs)
                       "ssd_vgg300.onnx",  # where to save the model (can be a file or file-like object)
-                      export_params=True,  # store the trained parameter weights inside the model file
-                      opset_version=10,  # the ONNX version to export the model to
-                      do_constant_folding=True,  # whether to execute constant folding for optimization
+                      verbose = True,
+                  # whether to execute constant folding for optimization
                       input_names=['input'],  # the model's input names
                       output_names=['reg', 'cls'],  # the model's output names
                       # dynamic_axes={'input': {0: 'batch_size'},  # variable lenght axes
@@ -54,7 +53,7 @@ def converToOnxx(torch_model):
 if __name__ == '__main__':
 
     net = build_ssd_onnx('test', 300, 21)
-    net.load_weights('../weights/ssd300_mAP_77.43_v2.pth')
+    net.load_weights('../weights/ssd300_mAP_74.9.pth')
     converToOnxx(net)
     print('convert pytorch to onnx model successfully!!!\n')
 
